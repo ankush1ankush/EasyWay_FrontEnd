@@ -60,7 +60,7 @@ function App() {
           <Route path="/"  element={user?<Home User={user} notes={notes} getUser={getUser}/>:<Navigate to="/login"/>}/>
           <Route path="/login"  element={user?<Navigate to="/"/>:<Login getUser={getUser} setUser={setUser}/>}/>
           <Route path="/register"  element={user?<Navigate to='/'/>:<Register getUser={getUser} setUser={setUser}/>}/>
-          <Route path="/uploadFile"  element={user?<UploadFile client_id={user._id} files={files} getUser={getUser} />:<Navigate to='/'/>}/>
+          <Route path="/uploadFile"  element={user?<UploadFile client_id={user._id} files={files} getUser={getUser} setUser={setUser} />:<Navigate to='/'/>}/>
           
       </Routes>
       

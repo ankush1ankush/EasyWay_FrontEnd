@@ -9,12 +9,6 @@ const UploadFile =(props)=>{
     //console.log(props)
     
     const [selectedFile, setSelectedFile] = useState(null);
-    const [files,setFiles] =useState([])
-    console.log(props.files);
-    useEffect(() => {
-      setFiles(props.files);
-    },[files])
-    
     const handleFileSelect = (e) =>{
       e.preventDefault();
       setSelectedFile(e?.target?.files[0])
@@ -50,7 +44,25 @@ const UploadFile =(props)=>{
             }
             alert("Uploaded Successfully");
             setSelectedFile(null)
-            await props?.getUser();
+            if (!response.ok) {
+                const result = await response.json();
+                //console.log(result);
+
+                alert(result.message);
+
+
+            }
+            else {
+                const result = await response.json();
+                console.log(result)
+                if (result.client) {
+                    props?.getUser();
+                    
+                }
+                else {
+                    alert(result.message);
+                }
+            }
         }
         catch(error){
 
@@ -72,7 +84,7 @@ const UploadFile =(props)=>{
          </form>
          <div className='upload__file__grid'>
             {
-              files.map((d,i) => {
+              props?.files.map((d,i) => {
                 console.log(d);
                 return (
                  
