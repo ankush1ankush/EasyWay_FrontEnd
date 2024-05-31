@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import "./login.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import GoogleIcon from '@mui/icons-material/Google';
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 function Login(props) {
-
+   
     const [user, setUser] = useState({
 
         userName: "",
@@ -13,6 +13,7 @@ function Login(props) {
 
 
     })
+    const navigate = useNavigate();
     const googleAuth = () => {
         //console.log("click");
         window.open(
@@ -83,6 +84,7 @@ function Login(props) {
                 // console.log(result)
                 if (result.myclient) {
                     await props?.getUser();
+                    navigate("/")
                 }
                 else {
                     alert(result.message);

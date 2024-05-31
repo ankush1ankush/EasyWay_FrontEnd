@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Register.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
-//import {  useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 
 
 function Register(props){
@@ -12,6 +12,7 @@ function Register(props){
         email:"",
     
      })
+    const navigate = useNavigate();
  const RegisterUser= async (event)=>{
     event.preventDefault()
      //console.log(user);
@@ -73,7 +74,8 @@ function Register(props){
         console.log(result)
         if(result?.myclient)
         {
-           await props?.getUser()
+           await props?.getUser();
+           navigate("/")
         } 
     }
           
