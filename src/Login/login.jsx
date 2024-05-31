@@ -83,8 +83,8 @@ function Login(props) {
                 const result = await response.json();
                 // console.log(result)
                 if (result.myclient) {
-                    await props?.getUser();
-                    navigate("/")
+                    props?.setUser(result.myclient);
+                    
                 }
                 else {
                     alert(result.message);

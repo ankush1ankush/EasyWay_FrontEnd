@@ -74,8 +74,7 @@ function Register(props){
         console.log(result)
         if(result?.myclient)
         {
-           await props?.getUser();
-           navigate("/")
+           props?.setUser(result.myclient);
         } 
     }
           
