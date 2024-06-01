@@ -13,6 +13,7 @@ const UploadFile =(props)=>{
       e.preventDefault();
       setSelectedFile(e?.target?.files[0])
     }
+    const [files,setFiles] =useState(props?.files);
 
     const handleSubmit= async (event)=>{
         event.preventDefault()
@@ -56,7 +57,7 @@ const UploadFile =(props)=>{
                 const result = await response.json();
                 console.log(result)
                 if (result.client) {
-                    props?.getUser();
+                    setFiles(result.client?.Document);
                     
                 }
                 else {
@@ -84,7 +85,7 @@ const UploadFile =(props)=>{
          </form>
          <div className='upload__file__grid'>
             {
-              props?.files.map((d,i) => {
+              files.map((d,i) => {
                 console.log(d);
                 return (
                  
