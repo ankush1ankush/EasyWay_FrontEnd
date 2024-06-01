@@ -13,8 +13,38 @@ const UploadFile =(props)=>{
       e.preventDefault();
       setSelectedFile(e?.target?.files[0])
     }
-    const [files,setFiles] =useState(props?.files);
-
+    const [files,setFiles] =useState([]);
+    useEffect( ()=>{
+         
+        const getfile = async () => {
+            const url = `${process.env.REACT_APP_API_URL}/submit/getAllFiles`;
+            const response = await fetch(url, {
+                method: "POST",
+                credentials: 'include',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    client_id : props?.client_id
+                })
+            })
+            if(response.ok)
+            {
+               const data = await response.json();
+               console.log(data)
+               setFiles(data.Document)
+            }
+            else{
+                const result= await response.json();
+                console.log(result);
+                setFiles(result?.Document)
+                alert(result.message);
+            }
+        } 
+        getfile() ;
+            
+    },[]);
     const handleSubmit= async (event)=>{
         event.preventDefault()
         try{
@@ -43,8 +73,11 @@ const UploadFile =(props)=>{
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
+            const data = await response.json();
+            
             alert("Uploaded Successfully");
             setSelectedFile(null)
+            setFiles(data.client?.Document);
             if (!response.ok) {
                 const result = await response.json();
                 //console.log(result);
@@ -53,17 +86,7 @@ const UploadFile =(props)=>{
 
 
             }
-            else {
-                const result = await response.json();
-                console.log(result)
-                if (result.client) {
-                    setFiles(result.client?.Document);
-                    
-                }
-                else {
-                    alert(result.message);
-                }
-            }
+            
         }
         catch(error){
 
@@ -75,7 +98,7 @@ const UploadFile =(props)=>{
     return (
 
         <div >
-         <form className="upload"onSubmit={handleSubmit}>
+         <form onsubmit="return false" className="upload"onSubmit={handleSubmit}>
          <div className='file-input'>
         <input type='file' onChange={handleFileSelect} />
         <span className='button'>Choose</span>
@@ -85,14 +108,15 @@ const UploadFile =(props)=>{
          </form>
          <div className='upload__file__grid'>
             {
-              files.map((d,i) => {
+              files?.map((d) => {
                 console.log(d);
                 return (
                  
-                  <FileCard client_id={props.client_id}  data={d} key={i} getUser={props?.getUser} />
+                  <FileCard client_id={props.client_id}  data={d} getUser={props?.getUser} />
                 )
               })
             }
+              
          </div>
         </div>
     )
