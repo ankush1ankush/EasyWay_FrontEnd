@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect,useContext} from "react";
 import Header from  "./Header/Header"
 import Footer from "./Footer/Footer";
 import Home from "./Home/Home";
 import Register from "./Register/Register";
 //import UploadImage from "./UploadImage/UploadImage";
 import UploadFile from "./UploadFile/UploardFile"
+import {AppContext} from "./Storage/Storage" 
 import "./App.css";
 
 import { Routes, Route, Navigate } from "react-router-dom";
@@ -13,42 +14,12 @@ import Login from "./Login/login";
 
 function App() {
 
+  const {getUser, user}=useContext(AppContext);
   
-  const [user, setUser] = useState(null);
-  
-  const [notes, setNotes] = useState([]);
-  const [files,setFiles] = useState([]);
-  const getUser = async () => {
-    const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          // 'Content-Type' header is not necessary for a GET request
-        },
-      });
-    
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-    
-      const data = await response.json(); 
-      //console.log(data.user);
-      if(data?.user){
-      setUser(data.user);
-      setNotes(user.notes);
-      setFiles(user?.Document)
-      }
-     // console.log(user)f
-    } catch (error) {
-      console.error('Fetch error:', error);
-    }
-	};
 
-  useEffect(()=>{
-  getUser();
-  },[]);
+  useEffect( ()=>{
+    getUser();
+  },[getUser])
 
   return (
     <>
@@ -57,10 +28,9 @@ function App() {
       <Header  User={user} />    
       <Routes>
         
-          <Route path="/"  element={user?<Home User={user} notes={notes} getUser={getUser}/>:<Navigate to="/login"/>}/>
-          <Route path="/login"  element={user?<Navigate to="/"/>:<Login getUser={getUser} setUser={setUser}/>}/>
-          <Route path="/register"  element={user?<Navigate to='/'/>:<Register getUser={getUser} setUser={setUser}/>}/>
-          <Route path="/uploadFile"  element={user?<UploadFile client_id={user._id} files={files} getUser={getUser} setUser={setUser} />:<Navigate to='/'/>}/>
+          <Route path="/"  element={user?<Home/>:<Login/>}/>
+          <Route path="/register"  element={user?<Navigate to='/'/>:<Register />}/>
+          <Route path="/uploadFile"  element={user?<UploadFile client_id={user._id} />:<Navigate to='/'/>}/>
           
       </Routes>
       
