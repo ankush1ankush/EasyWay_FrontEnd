@@ -1,9 +1,11 @@
-import React from 'react'
+import React ,{useContext} from 'react'
 import { ref, deleteObject} from 'firebase/storage';
 import DeleteIcon from '@mui/icons-material/Delete';
-import db, { storage  } from '../firebase'
+import  { storage  } from '../firebase'
+import { AppContext } from '../Storage/Storage';
 import './UloardFile.css'
 function FileCard(props) {
+  const {user} = useContext(AppContext);
   const {data} = props;
   const handleClick = ()=>{
      const desertRef=  ref(storage, `files/${data?.file_name}`)
@@ -18,16 +20,17 @@ function FileCard(props) {
                         'Content-Type': 'application/json'
                       },
                       body: JSON.stringify({
-                        client_id:props.client_id,
+                        client_id:user._id,
                         data:data,
                       })
                     });
                     if (!response.ok) {
                     throw new Error('Network response was not ok');
                     }
+     const client = await response.json();
+     props?.setFiles(client.Documents);        
+     alert("File deleted Successfully");
                     
-                    alert("File deleted Successfully");
-                    await props?.getUser();
      }).catch((error) => {
         console.log(error)
      });

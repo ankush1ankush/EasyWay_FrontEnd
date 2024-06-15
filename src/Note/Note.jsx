@@ -1,15 +1,12 @@
-import React from "react";
+import React ,{useContext}from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import "./Note.css";
-
-
-
-
+import { AppContext } from "../Storage/Storage";
 
 
 function Note(props) {
 
-
+  const { user, getUser } = useContext(AppContext)
   const  deleteNote= async () => {
     const url = `${process.env.REACT_APP_API_URL}/submit/deleteNote`;
     
@@ -22,7 +19,7 @@ function Note(props) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          client_id:props.client_id,
+          client_id:user._id,
           Note_id: props.id
           
         })
@@ -39,7 +36,7 @@ function Note(props) {
 
       const result= await response.json();
       console.log(result);
-      await props?.getUser();
+      await getUser();
     } catch (error) {
       console.error('Fetch error:', error);
     }

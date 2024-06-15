@@ -1,19 +1,20 @@
-import React, { useState } from "react";
+import React, { useState , useContext} from "react";
 
 import "./login.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import GoogleIcon from '@mui/icons-material/Google';
-import { Link ,useNavigate} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { AppContext } from "../Storage/Storage";
 function Login(props) {
-   
-    const [user, setUser] = useState({
+    const { setUser } = useContext(AppContext);
+    const [client, setClient] = useState({
 
         userName: "",
         password: "",
 
 
     })
-    const navigate = useNavigate();
+   
     const googleAuth = () => {
         //console.log("click");
         window.open(
@@ -39,8 +40,8 @@ function Login(props) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    username: user.userName,
-                    password: user.password,
+                    username: client.userName,
+                    password: client.password,
                 })
             })
 
@@ -83,7 +84,7 @@ function Login(props) {
                 const result = await response.json();
                 // console.log(result)
                 if (result.myclient) {
-                    props?.setUser(result.myclient);
+                    setUser(result.myclient);
                     
                 }
                 else {
@@ -102,7 +103,7 @@ function Login(props) {
     }
     function handleChange(event) {
         const { name, value } = event.target;
-        setUser((preUser) => {
+        setClient((preUser) => {
             return { ...preUser, [name]: value }
         })
     }
@@ -114,11 +115,11 @@ function Login(props) {
                     <form class="login">
                         <div class="login__field">
                             <i class="login__icon fas fa-user"></i>
-                            <input type="text" onChange={handleChange} value={user.username} name="userName" className="login__input" placeholder="Usename" />
+                            <input type="text" onChange={handleChange} value={client.username} name="userName" className="login__input" placeholder="Usename" />
                         </div>
                         <div class="login__field">
                             <i class="login__icon fas fa-lock"></i>
-                            <input type="password" onChange={handleChange} value={user.password} name="password" className="login__input" placeholder="Password" />
+                            <input type="password" onChange={handleChange} value={client.password} name="password" className="login__input" placeholder="Password" />
                         </div>
                         <button type="submit" onClick={login} className="button login__submit">
                             <span className="button__text">Log In Now</span>

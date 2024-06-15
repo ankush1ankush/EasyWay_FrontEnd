@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import Zoom from "@material-ui/core/Zoom";
 import "./CreateArea.css";
+import { AppContext } from "../Storage/Storage";
 
-function CreateArea(props) {
+function CreateArea() {
   const [isExpanded, setExpanded] = useState(false);
-  
+  const { getUser, user } = useContext(AppContext)
  
   const [note, setNote] = useState({
     title: "",
@@ -24,15 +25,13 @@ function CreateArea(props) {
     });
   }
 
-  function submitNote(event) {
+  async function submitNote(event) {
     event.preventDefault();
-    ADDdata();
     setNote({
       title: "",
       content: ""
     });
-   
-    
+    await ADDdata();
   }
 
   function expand() {
@@ -55,22 +54,18 @@ function CreateArea(props) {
         body: JSON.stringify({
           title: note.title,
           content: note.content,
-          clientId: props.User._id
+          clientId: user._id
         })
       });
       
-     
-     
-      
+
       
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-
-      const result= await response.json();
-      console.log("result : "+ result);
-      
+      await getUser();
+      console.log(user)
     } catch (error) {
       console.error('Fetch error:', error);
     }

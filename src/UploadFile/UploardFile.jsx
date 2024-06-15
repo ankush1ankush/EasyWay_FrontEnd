@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ref, uploadBytes, getDownloadURL} from 'firebase/storage';
-
+import { AppContext } from '../Storage/Storage';
 import  { storage } from '../firebase'
 import './UloardFile.css'
 import FileCard from './FileCard';
 
 const UploadFile =(props)=>{
     //console.log(props)
-    
+    const {user} = useContext(AppContext);
     const [selectedFile, setSelectedFile] = useState(null);
     const handleFileSelect = (e) =>{
       e.preventDefault();
       setSelectedFile(e?.target?.files[0])
     }
-    const [files,setFiles] =useState([]);
+    const [files,setFiles] = useState([]);
     useEffect( ()=>{
          
         const getfile = async () => {
@@ -26,25 +26,22 @@ const UploadFile =(props)=>{
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    client_id : props?.client_id
+                    client_id : user._id
                 })
             })
             if(response.ok)
             {
                const data = await response.json();
-               console.log(data)
-               setFiles(data.Document)
+               setFiles(data.Documents)
             }
             else{
                 const result= await response.json();
-                console.log(result);
-                setFiles(result?.Document)
                 alert(result.message);
             }
         } 
         getfile() ;
             
-    },[]);
+    },[user]);
     const handleSubmit= async (event)=>{
         event.preventDefault()
         try{
@@ -77,14 +74,12 @@ const UploadFile =(props)=>{
             
             alert("Uploaded Successfully");
             setSelectedFile(null)
-            setFiles(data.client?.Document);
+            
+            setFiles(data.Documents);
             if (!response.ok) {
                 const result = await response.json();
                 //console.log(result);
-
                 alert(result.message);
-
-
             }
             
         }
@@ -107,12 +102,15 @@ const UploadFile =(props)=>{
         <button className='fileButton' type="submit">SUBMIT</button>
          </form>
          <div className='upload__file__grid'>
-            {
+            { 
+             
               files?.map((d) => {
-                console.log(d);
+                
                 return (
-                 
-                  <FileCard client_id={props.client_id}  data={d} getUser={props?.getUser} />
+                  <>
+                   
+                  <FileCard  data={d} setFiles = {setFiles} />
+                  </>
                 )
               })
             }

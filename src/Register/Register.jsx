@@ -1,21 +1,19 @@
-import React, { useState } from "react";
+import React, { useState , useContext} from "react";
 import "./Register.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {  useNavigate } from 'react-router-dom';
-
+import { AppContext } from "../Storage/Storage";
 
 function Register(props){
-    //const navigate = useNavigate();
-    const [user,setUser]=useState({
+    const {setUser} = useContext(AppContext)
+    const [client,setClient]=useState({
         userName:"",
         password:"",
         email:"",
     
      })
-    const navigate = useNavigate();
+    
  const RegisterUser= async (event)=>{
     event.preventDefault()
-     //console.log(user);
     const url  = `${process.env.REACT_APP_API_URL}/submit/register`;
 
     try{
@@ -28,9 +26,9 @@ function Register(props){
             'Content-Type': 'application/json'
            },
            body: JSON.stringify({
-            username:user.userName,
-            email:user.email,
-            password:user.password,
+            username:client.userName,
+            email:client.email,
+            password:client.password,
            })
         })
 
@@ -74,7 +72,7 @@ function Register(props){
         console.log(result)
         if(result?.myclient)
         {
-           props?.setUser(result.myclient);
+           setUser(result.myclient);
         } 
     }
           
@@ -98,7 +96,7 @@ function Register(props){
      
      const {name,value}=event.target;
      
-     setUser((preValue)=>{
+     setClient((preValue)=>{
         return {
             ...preValue,
             [name]:value
@@ -114,15 +112,15 @@ function Register(props){
                 <form onSubmit={RegisterUser} class="login">
                     <div class="login__field">
                         <i class="login__icon fas fa-user"></i>
-                        <input type="text" value={user.email} onChange={handleChange} name="email" className="login__input" placeholder="Email"/>
+                        <input type="text" value={client.email} onChange={handleChange} name="email" className="login__input" placeholder="Email"/>
                     </div>
                     <div class="login__field">
                         <i class="login__icon fas fa-user"></i>
-                        <input type="text" value={user.userName} onChange={handleChange}  name="userName" className="login__input" placeholder="User name"/>
+                        <input type="text" value={client.userName} onChange={handleChange}  name="userName" className="login__input" placeholder="User name"/>
                     </div>
                     <div class="login__field">
                         <i class="login__icon fas fa-lock"></i>
-                        <input type="password"value={user.password} onChange={handleChange} name="password" className="login__input" placeholder="Password"/>
+                        <input type="password"value={client.password} onChange={handleChange} name="password" className="login__input" placeholder="Password"/>
                     </div>
                     <button type="submit"  className="button login__submit">
                         <span className="button__text">Register Now</span>
