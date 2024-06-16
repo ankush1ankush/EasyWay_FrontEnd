@@ -93,7 +93,7 @@ const UploadFile =(props)=>{
     return (
 
         <div >
-         <form onsubmit="return false" className="upload"onSubmit={handleSubmit}>
+         <form className="upload" onSubmit={handleSubmit}>
          <div className='file-input'>
         <input type='file' onChange={handleFileSelect} />
         <span className='button'>Choose</span>
@@ -102,14 +102,15 @@ const UploadFile =(props)=>{
         <button className='fileButton' type="submit">SUBMIT</button>
          </form>
          <div className='upload__file__grid'>
+            {console.log(files)};
             { 
-             
-              files?.map((d) => {
+            
+              files.map((d) => {
                 
                 return (
                   <>
                    
-                  <FileCard  data={d} setFiles = {setFiles} />
+                  <FileCard  key={d} data={d} setFiles = {setFiles} />
                   </>
                 )
               })
