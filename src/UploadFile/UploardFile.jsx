@@ -103,6 +103,7 @@ const UploadFile =(props)=>{
          </form>
          <div className='upload__file__grid'>
             {console.log(files)};
+
             { 
             
               files.map((d) => {
