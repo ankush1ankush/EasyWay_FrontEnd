@@ -9,11 +9,12 @@ const UploadFile =(props)=>{
     //console.log(props)
     const {user} = useContext(AppContext);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [files,setFiles] = useState([]);
     const handleFileSelect = (e) =>{
       e.preventDefault();
       setSelectedFile(e?.target?.files[0])
     }
-    const [files,setFiles] = useState([]);
+    
     useEffect( ()=>{
          
         const getfile = async () => {
@@ -32,7 +33,8 @@ const UploadFile =(props)=>{
             if(response.ok)
             {
                const data = await response.json();
-               setFiles(data.Documents)
+               const documents=data.Documents;
+               setFiles([...documents]);
             }
             else{
                 const result= await response.json();
@@ -71,11 +73,9 @@ const UploadFile =(props)=>{
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            
+            const documents=data.Documents;
+            setFiles([...documents]);
             alert("Uploaded Successfully");
-            setSelectedFile(null)
-            
-            setFiles(data.Documents);
             if (!response.ok) {
                 const result = await response.json();
                 //console.log(result);
@@ -105,13 +105,10 @@ const UploadFile =(props)=>{
             {console.log(files)};
             { 
             
-              files.map((d) => {
+              files.map((d,index) => {
                 
                 return (
-                  <>
-                   
-                  <FileCard  key={d} data={d} setFiles = {setFiles} />
-                  </>
+                  <FileCard  key={index} data={d} setFiles = {setFiles} />
                 )
               })
             }
