@@ -102,6 +102,9 @@ const UploadFile =(props)=>{
         <button className='fileButton' type="submit">SUBMIT</button>
          </form>
          <div className='upload__file__grid'>
+            {
+                console.log(files);
+            }
             { 
              
               files?.map((d) => {
