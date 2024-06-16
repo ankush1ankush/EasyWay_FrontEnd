@@ -109,16 +109,16 @@ function Login(props) {
     }
 
     return (
-        <div class="container">
-            <div class="screen">
-                <div class="screen__content">
-                    <form class="login">
-                        <div class="login__field">
-                            <i class="login__icon fas fa-user"></i>
+        <div className="container">
+            <div className="screen">
+                <div className="screen__content">
+                    <form className="login">
+                        <div className="login__field">
+                            <i className="login__icon fas fa-user"></i>
                             <input type="text" onChange={handleChange} value={client.username} name="userName" className="login__input" placeholder="Usename" />
                         </div>
-                        <div class="login__field">
-                            <i class="login__icon fas fa-lock"></i>
+                        <div className="login__field">
+                            <i className="login__icon fas fa-lock"></i>
                             <input type="password" onChange={handleChange} value={client.password} name="password" className="login__input" placeholder="Password" />
                         </div>
                         <button type="submit" onClick={login} className="button login__submit">
@@ -134,7 +134,7 @@ function Login(props) {
                     </div>
 
                 </div>
-                <div class="screen__background">
+                <div className="screen__background">
                     <span className="screen__background__shape screen__background__shape4"></span>
                     <span className="screen__background__shape screen__background__shape3"></span>
                     <span className="screen__background__shape screen__background__shape2"></span>
