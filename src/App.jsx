@@ -19,6 +19,7 @@ function App() {
 
   useEffect( ()=>{
     getUser();
+    console.log(user);
   },[getUser])
 
   return (
